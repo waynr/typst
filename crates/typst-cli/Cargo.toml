@@ -19,6 +19,14 @@ doctest = false
 bench = false
 doc = false
 
+[lib]
+name = "typst_cli"
+path = "src/main.rs"
+test = false
+doctest = false
+bench = false
+doc = false
+
 [dependencies]
 typst = { workspace = true }
 typst-library = { workspace = true }

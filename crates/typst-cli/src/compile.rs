@@ -11,6 +11,7 @@ use typst::eval::{eco_format, Datetime, Tracer};
 use typst::geom::Color;
 use typst::syntax::{FileId, Source, Span};
 use typst::{World, WorldExt};
+use ecow::EcoString;
 
 use crate::args::{CompileCommand, DiagnosticFormat, OutputFormat};
 use crate::watch::Status;
@@ -104,6 +105,7 @@ pub fn compile_once(
             if let Some(open) = command.open.take() {
                 open_file(open.as_deref(), &command.output())?;
             }
+            Ok(())
         }
 
         // Print diagnostics.
@@ -122,10 +124,9 @@ pub fn compile_once(
                 command.common.diagnostic_format,
             )
             .map_err(|err| eco_format!("failed to print diagnostics ({err})"))?;
+            Err(EcoString::from("failed"))
         }
     }
-
-    Ok(())
 }
 
 /// Export into the target format.

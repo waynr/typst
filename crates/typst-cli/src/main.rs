@@ -1,5 +1,5 @@
-mod args;
-mod compile;
+pub mod args;
+pub mod compile;
 mod download;
 mod fonts;
 mod package;
@@ -8,7 +8,7 @@ mod tracing;
 #[cfg(feature = "self-update")]
 mod update;
 mod watch;
-mod world;
+pub mod world;
 
 use std::cell::Cell;
 use std::io::{self, IsTerminal, Write};

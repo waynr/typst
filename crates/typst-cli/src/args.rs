@@ -47,7 +47,7 @@ pub enum Command {
 }
 
 /// Compiles an input file into a supported output format
-#[derive(Debug, Clone, Parser)]
+#[derive(Debug, Default, Clone, Parser)]
 pub struct CompileCommand {
     /// Shared arguments
     #[clap(flatten)]
@@ -104,7 +104,7 @@ pub enum SerializationFormat {
 }
 
 /// Common arguments of compile, watch, and query.
-#[derive(Debug, Clone, Args)]
+#[derive(Debug, Default, Clone, Args)]
 pub struct SharedArgs {
     /// Path to input Typst file
     pub input: PathBuf,
@@ -149,8 +149,9 @@ pub struct FontsCommand {
 }
 
 /// Which format to use for diagnostics.
-#[derive(Debug, Copy, Clone, Eq, PartialEq, Ord, PartialOrd, ValueEnum)]
+#[derive(Debug, Default, Copy, Clone, Eq, PartialEq, Ord, PartialOrd, ValueEnum)]
 pub enum DiagnosticFormat {
+    #[default]
     Human,
     Short,
 }
