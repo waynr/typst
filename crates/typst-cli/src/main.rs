@@ -1,5 +1,5 @@
-mod args;
-mod compile;
+pub mod args;
+pub mod compile;
 mod completions;
 mod deps;
 mod download;
@@ -16,7 +16,7 @@ mod timings;
 #[cfg(feature = "self-update")]
 mod update;
 mod watch;
-mod world;
+pub mod world;
 
 use std::cell::Cell;
 use std::io::{self, Write};
@@ -32,7 +32,7 @@ use serde::Serialize;
 use typst::diag::{HintedStrResult, StrResult};
 
 use crate::args::{CliArguments, Command, SerializationFormat};
-use crate::timings::Timer;
+pub use crate::timings::Timer;
 
 thread_local! {
     /// The CLI's exit code.
@@ -41,6 +41,19 @@ thread_local! {
 
 /// The parsed command line arguments.
 static ARGS: LazyLock<CliArguments> = LazyLock::new(|| {
+    // NOTE(wayne); this global static lazylock'd attempt to parse arguments totally breaks the use
+    // of typst-cli in an embedding environment; to work around that, we allow phantom arguments to
+    // be passed by env var and customize cli parse error handling here
+    if let Ok(value) = std::env::var("TYPST_CLI_ARGS") {
+        return CliArguments::try_parse_from(value.split_whitespace()).unwrap_or_else(
+            |error| {
+                eprintln!("failed to parse typst cli arguments");
+                eprintln!("{error:?}");
+                eprintln!("{error}");
+                std::process::exit(error.exit_code());
+            },
+        );
+    }
     CliArguments::try_parse().unwrap_or_else(|error| {
         if error.kind() == ErrorKind::DisplayHelpOnMissingArgumentOrSubcommand {
             crate::greet::greet();

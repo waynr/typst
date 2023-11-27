@@ -97,8 +97,8 @@ pub enum Command {
     Info(InfoCommand),
 }
 
-/// Compiles an input file into a supported output format.
-#[derive(Debug, Clone, Parser)]
+/// Compiles an input file into a supported output format
+#[derive(Debug, Default, Clone, Parser)]
 pub struct CompileCommand {
     /// Arguments for compilation.
     #[clap(flatten)]
@@ -241,7 +241,7 @@ pub struct InfoCommand {
 }
 
 /// Arguments for compilation and watching.
-#[derive(Debug, Clone, Args)]
+#[derive(Debug, Default, Clone, Args)]
 pub struct CompileArgs {
     /// Path to input Typst file. Use `-` to read input from stdin.
     #[clap(value_parser = input_value_parser(), value_hint = ValueHint::FilePath)]
@@ -338,7 +338,7 @@ pub struct CompileArgs {
 
 /// Arguments for the construction of a world. Shared by compile, watch, and
 /// query.
-#[derive(Debug, Clone, Args)]
+#[derive(Debug, Default, Clone, Args)]
 pub struct WorldArgs {
     /// Configures the project root (for absolute paths).
     #[clap(long = "root", env = "TYPST_ROOT", value_name = "DIR")]
@@ -374,7 +374,7 @@ pub struct WorldArgs {
 }
 
 /// Arguments for configuration the process of compilation itself.
-#[derive(Debug, Clone, Args)]
+#[derive(Debug, Default, Clone, Args)]
 pub struct ProcessArgs {
     /// Number of parallel jobs spawned during compilation. Defaults to number
     /// of CPUs. Setting it to 1 disables parallelism.
@@ -392,7 +392,7 @@ pub struct ProcessArgs {
 }
 
 /// Arguments related to where packages are stored in the system.
-#[derive(Debug, Clone, Args)]
+#[derive(Debug, Default, Clone, Args)]
 pub struct PackageArgs {
     /// Custom path to local packages, defaults to system-dependent location.
     #[clap(long = "package-path", env = "TYPST_PACKAGE_PATH", value_name = "DIR")]
@@ -408,7 +408,7 @@ pub struct PackageArgs {
 }
 
 /// Common arguments to customize available fonts.
-#[derive(Debug, Clone, Parser)]
+#[derive(Debug, Default, Clone, Parser)]
 pub struct FontArgs {
     /// Adds additional directories that are recursively searched for fonts.
     ///
@@ -467,8 +467,9 @@ macro_rules! display_possible_values {
 }
 
 /// An input that is either stdin or a real path.
-#[derive(Debug, Clone)]
+#[derive(Debug, Default, Clone)]
 pub enum Input {
+    #[default]
     /// Stdin, represented by `-`.
     Stdin,
     /// A non-empty path.

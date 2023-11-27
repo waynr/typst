@@ -44,10 +44,7 @@ impl<T: Display> Progress for PrintDownload<T> {
 /// Returns a new downloader.
 pub fn downloader() -> Downloader {
     let user_agent = concat!("typst/", env!("CARGO_PKG_VERSION"));
-    match ARGS.cert.clone() {
-        Some(cert) => Downloader::with_path(user_agent, cert),
-        None => Downloader::new(user_agent),
-    }
+    Downloader::new(user_agent)
 }
 
 /// Compile and format several download statistics and make and attempt at
